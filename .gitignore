@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Bundles generados por webpack
+static/bundle.js
+static/bundle.js.map
+static/*.bundle.js
+
+# Logs de errores de npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Archivos de sistema operativo
+Thumbs.db
+.DS_Store
+
+# Carpetas de editores
+.vscode/
+.idea/
+
+# Para claves o secretos de entorno
+.env
+.env.local
