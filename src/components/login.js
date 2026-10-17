@@ -13,7 +13,6 @@ const estiloInput = {
   background: "#ffffff",
 };
 
-// --- Pantalla de login + registro (con nombre, apellidos y negocio) ---
 export default function Login({ onLogin }) {
   const [modo, setModo] = useState("login");
   const [nombre, setNombre] = useState("");
@@ -39,12 +38,23 @@ export default function Login({ onLogin }) {
     setError("");
 
     if (modo === "registro") {
+      const hayCodigo = codigo.trim().length > 0;
+      const hayNegocio = nombreNegocio.trim().length > 0;
+
       if (password !== confirmar) {
         setError("Las contraseñas no coinciden.");
         return;
       }
-      if (codigo && !nombreNegocio) {
-        setError("Si usas un código de admin, indica el nombre de tu negocio.");
+
+      // >>> VALIDACION 1: nombre de negocio SIN codigo -> bloquear <<<
+      if (hayNegocio && !hayCodigo) {
+        setError("Para crear un negocio necesitas un codigo de administrador. Pon el codigo o deja vacio el nombre del negocio.");
+        return;
+      }
+
+      // >>> VALIDACION 2: codigo SIN nombre de negocio -> bloquear <<<
+      if (hayCodigo && !hayNegocio) {
+        setError("Si usas un codigo de admin, indica el nombre de tu negocio.");
         return;
       }
     }
@@ -167,7 +177,7 @@ export default function Login({ onLogin }) {
               type="text"
               style={estiloInput}
               value={codigo}
-              placeholder="Código de negocio (opcional)"
+              placeholder="Código de administrador (opcional)"
               aria-label="Código de invitación"
               onChange={(e) => setCodigo(e.target.value)}
             />
@@ -219,7 +229,7 @@ export default function Login({ onLogin }) {
             }}
           >
             Las cuentas nuevas se crean como <strong>cliente</strong>. Si eres un
-            negocio, usa tu código de invitación y pon el{" "}
+            negocio, usa tu código de administrador y pon el{" "}
             <strong>nombre de tu negocio</strong> para crearlo al registrarte.
           </p>
         )}
