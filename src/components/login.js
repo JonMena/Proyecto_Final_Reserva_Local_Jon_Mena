@@ -2,16 +2,77 @@ import React, { useState } from "react";
 import { login, registro } from "../api";
 import { saveSession, setNegocio } from "../auth";
 
-const estiloInput = {
-  width: "100%",
-  height: 44,
-  padding: "0 12px",
-  border: "1px solid #ccccdd",
-  borderRadius: 8,
-  fontSize: 15,
-  boxSizing: "border-box",
-  background: "#ffffff",
+// --- Icono SVG base (sin dependencias externas) ---
+const Icono = function ({ children }) {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </svg>
+  );
 };
+
+// --- Iconos elocuentes para cada campo ---
+const iconoNombre = (
+  <Icono>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </Icono>
+);
+
+const iconoApellidos = (
+  <Icono>
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </Icono>
+);
+
+const iconoEmail = (
+  <Icono>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
+  </Icono>
+);
+
+const iconoContrasena = (
+  <Icono>
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </Icono>
+);
+
+const iconoRepite = (
+  <Icono>
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    <path d="m9 16 2 2 4-4" />
+  </Icono>
+);
+
+const iconoCodigo = (
+  <Icono>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="m9 12 2 2 4-4" />
+  </Icono>
+);
+
+const iconoNegocio = (
+  <Icono>
+    <path d="M4 4h16l1 5H3l1-5z" />
+    <path d="M4 9v11h16V9" />
+    <path d="M9 20v-6h6v6" />
+  </Icono>
+);
 
 export default function Login({ onLogin }) {
   const [modo, setModo] = useState("login");
@@ -46,13 +107,11 @@ export default function Login({ onLogin }) {
         return;
       }
 
-      // >>> VALIDACION 1: nombre de negocio SIN codigo -> bloquear <<<
       if (hayNegocio && !hayCodigo) {
         setError("Para crear un negocio necesitas un codigo de administrador. Pon el codigo o deja vacio el nombre del negocio.");
         return;
       }
 
-      // >>> VALIDACION 2: codigo SIN nombre de negocio -> bloquear <<<
       if (hayCodigo && !hayNegocio) {
         setError("Si usas un codigo de admin, indica el nombre de tu negocio.");
         return;
@@ -105,35 +164,33 @@ export default function Login({ onLogin }) {
 
         {modo === "registro" && (
           <React.Fragment>
-            <input
-              type="text"
-              style={estiloInput}
-              value={nombre}
-              placeholder="Nombre"
-              aria-label="Nombre"
-              onChange={(e) => setNombre(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              style={estiloInput}
-              value={apellidos}
-              placeholder="Apellidos"
-              aria-label="Apellidos"
-              onChange={(e) => setApellidos(e.target.value)}
-              required
-            />
+            <div className="login-campo">
+              <span className="login-icono" aria-hidden="true">{iconoNombre}</span>
+              <input
+                type="text"
+                value={nombre}
+                placeholder="Nombre"
+                aria-label="Nombre"
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
+            </div>
+            <div className="login-campo">
+              <span className="login-icono" aria-hidden="true">{iconoApellidos}</span>
+              <input
+                type="text"
+                value={apellidos}
+                placeholder="Apellidos"
+                aria-label="Apellidos"
+                onChange={(e) => setApellidos(e.target.value)}
+                required
+              />
+            </div>
           </React.Fragment>
         )}
 
         <div className="login-campo">
-          <span className="login-icono" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </span>
+          <span className="login-icono" aria-hidden="true">{iconoEmail}</span>
           <input
             type="email"
             value={email}
@@ -145,13 +202,7 @@ export default function Login({ onLogin }) {
         </div>
 
         <div className="login-campo">
-          <span className="login-icono" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-          </span>
+          <span className="login-icono" aria-hidden="true">{iconoContrasena}</span>
           <input
             type="password"
             value={password}
@@ -164,31 +215,37 @@ export default function Login({ onLogin }) {
 
         {modo === "registro" && (
           <React.Fragment>
-            <input
-              type="password"
-              style={estiloInput}
-              value={confirmar}
-              placeholder="Repite la contraseña"
-              aria-label="Repite la contraseña"
-              onChange={(e) => setConfirmar(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              style={estiloInput}
-              value={codigo}
-              placeholder="Código de administrador (opcional)"
-              aria-label="Código de invitación"
-              onChange={(e) => setCodigo(e.target.value)}
-            />
-            <input
-              type="text"
-              style={estiloInput}
-              value={nombreNegocio}
-              placeholder="Nombre de tu negocio (solo con código)"
-              aria-label="Nombre de tu negocio"
-              onChange={(e) => setNombreNegocio(e.target.value)}
-            />
+            <div className="login-campo">
+              <span className="login-icono" aria-hidden="true">{iconoRepite}</span>
+              <input
+                type="password"
+                value={confirmar}
+                placeholder="Repite la contraseña"
+                aria-label="Repite la contraseña"
+                onChange={(e) => setConfirmar(e.target.value)}
+                required
+              />
+            </div>
+            <div className="login-campo">
+              <span className="login-icono" aria-hidden="true">{iconoCodigo}</span>
+              <input
+                type="text"
+                value={codigo}
+                placeholder="Código de administrador (opcional)"
+                aria-label="Código de invitación"
+                onChange={(e) => setCodigo(e.target.value)}
+              />
+            </div>
+            <div className="login-campo">
+              <span className="login-icono" aria-hidden="true">{iconoNegocio}</span>
+              <input
+                type="text"
+                value={nombreNegocio}
+                placeholder="Nombre de tu negocio (solo con código)"
+                aria-label="Nombre de tu negocio"
+                onChange={(e) => setNombreNegocio(e.target.value)}
+              />
+            </div>
           </React.Fragment>
         )}
 
