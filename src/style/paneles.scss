@@ -1,31 +1,31 @@
 // ============================================================
-// ESTILOS DE RESERVA LOCAL: paneles, selector, toasts, fotos
+// ESTILOS DE RESERVA LOCAL: modo oscuro elegante
 // ============================================================
 
-// ---------- LOGIN: TODOS los campos iguales (mismo ancho, alto y arranque) ----------
+// ---------- LOGIN: override para unificar tamaños ----------
 .login-caja {
   input {
     width: 100% !important;
     height: 44px !important;
     min-height: 0 !important;
     max-height: 44px !important;
-    padding: 0 12px !important;
-    border: 1px solid #ccccdd !important;
-    border-radius: 8px !important;
+    padding: 0 14px !important;
+    border: 1px solid var(--borde) !important;
+    border-radius: 10px !important;
     font-size: 15px !important;
     box-sizing: border-box !important;
-    background: #ffffff !important;
+    background: var(--superficie-2) !important;
+    color: var(--texto) !important;
   }
 
-  // Recuadros con icono (email / contraseña): mismo ancho que los demás
   .login-campo {
     width: 100% !important;
     height: 44px;
     display: flex;
     align-items: center;
-    border: 1px solid #ccccdd;
-    border-radius: 8px;
-    background: #ffffff;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background: var(--superficie-2);
     box-sizing: border-box;
     overflow: hidden;
 
@@ -33,9 +33,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
+      width: 44px;
       height: 100%;
-      color: #8a97a8;
+      color: var(--texto-sec);
       flex-shrink: 0;
     }
 
@@ -51,155 +51,189 @@
   }
 }
 
-// ---------- NAVBAR (barra superior con icono del negocio) ----------
+// ---------- NAVBAR ----------
 .navbar {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
-  padding: 10px 16px;
-  background: #111827;
-  color: #ffffff;
+  padding: 12px 20px;
+  background: #0b1220;
+  color: var(--texto);
+  border-bottom: 1px solid var(--borde);
 
   .navbar-icono {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #374151;
+    border: 2px solid var(--borde);
   }
 
-  .navbar-marca { font-weight: 700; font-size: 16px; }
-  .navbar-usuario { margin-left: auto; font-size: 13px; color: #d1d5db; }
+  .navbar-marca {
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--texto);
+  }
+  .navbar-usuario {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--texto-sec);
+  }
 
   .navbar-cambiar {
-    height: 32px !important;
-    padding: 0 12px !important;
-    border: 1px solid #4b5563;
+    height: 34px !important;
+    padding: 0 14px !important;
+    border: 1px solid var(--borde);
     border-radius: 8px;
     background: transparent;
-    color: #ffffff;
+    color: var(--texto);
     cursor: pointer;
     font-size: 13px;
-    &:hover { background: #1f2937; }
+    font-weight: 500;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    &:hover {
+      background: var(--superficie);
+      border-color: var(--primario);
+    }
   }
 
   .navbar-logout {
-    height: 32px !important;
-    padding: 0 12px !important;
-    border: 1px solid #7f1d1d;
+    height: 34px !important;
+    padding: 0 14px !important;
+    border: 1px solid #991b1b;
     border-radius: 8px;
-    background: #dc2626;
-    color: #ffffff;
+    background: var(--error-bg);
+    color: #fecaca;
     cursor: pointer;
     font-size: 13px;
-    &:hover { background: #b91c1c; }
+    font-weight: 600;
+    transition: background 0.15s ease;
+    &:hover { background: #991b1b; color: #ffffff; }
   }
 }
 
-// ---------- SELECTOR DE NEGOCIOS (cliente al entrar) ----------
+// ---------- SELECTOR DE NEGOCIOS ----------
 .selector-contenedor {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  background: #f4f6f8;
-  padding: 24px;
+  gap: 28px;
+  background: var(--fondo);
+  padding: 28px;
 }
 
 .selector-titulo {
   margin: 0;
-  font-size: 26px;
-  color: #111827;
+  font-size: 28px;
+  color: var(--texto);
+  font-weight: 700;
 }
 
 .selector-grid {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 700px;
+  max-width: 760px;
 }
 
 .selector-tarjeta {
-  width: 200px;
-  padding: 20px 16px;
-  border: 1px solid #e5e9f0;
+  width: 210px;
+  padding: 22px 18px;
+  border: 1px solid var(--borde);
   border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background: var(--superficie);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  gap: 12px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  color: var(--texto);
 
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    border-color: var(--primario);
   }
 
   .selector-icono {
-    width: 64px;
-    height: 64px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid var(--borde);
   }
 
-  .selector-icono-fallback { font-size: 44px; line-height: 1; }
+  .selector-icono-fallback {
+    font-size: 46px;
+    line-height: 1;
+  }
 
   .selector-nombre {
     font-size: 16px;
     font-weight: 700;
-    color: #111827;
+    color: var(--texto);
   }
 
   .selector-entrar {
     font-size: 13px;
-    color: #2563eb;
+    color: var(--primario);
     font-weight: 600;
   }
 }
 
 .selector-salir {
-  height: 36px !important;
-  padding: 0 16px !important;
-  border: none;
+  height: 40px !important;
+  padding: 0 18px !important;
+  border: 1px solid var(--borde);
   border-radius: 8px;
-  background: #6b7280;
-  color: #ffffff;
+  background: transparent;
+  color: var(--texto);
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  &:hover { background: #4b5563; }
+  transition: background 0.15s ease, border-color 0.15s ease;
+  &:hover {
+    background: var(--superficie);
+    border-color: var(--primario);
+  }
 }
 
-// ---------- TOASTS (notificaciones que aparecen y se van solas) ----------
+// ---------- TOASTS ----------
 .toast-contenedor {
   position: fixed;
-  top: 16px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
 }
 
 .toast {
-  padding: 10px 18px;
+  padding: 12px 20px;
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  color: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  color: #0f172a;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
   animation: toast-in 0.25s ease;
+  border: 1px solid transparent;
 
-  &.toast-ok { background: #16a34a; }
-  &.toast-error { background: #dc2626; }
+  &.toast-ok {
+    background: var(--exito);
+  }
+  &.toast-error {
+    background: var(--error);
+    color: #450a0a;
+  }
 }
 
 @keyframes toast-in {
@@ -209,165 +243,200 @@
 
 // ---------- PANEL GENERAL ----------
 .panel {
-  max-width: 900px;
+  max-width: 940px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .panel-busqueda {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 
   input[type="search"] {
     flex: 1;
-    min-width: 200px;
-    height: 36px !important;
-    padding: 0 12px !important;
-    border: 1px solid #c9d2dd;
-    border-radius: 8px;
+    min-width: 220px;
+    height: 40px !important;
+    padding: 0 14px !important;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
     font-size: 14px;
     box-sizing: border-box;
-    background: #ffffff;
+    background: var(--superficie-2);
+    color: var(--texto);
   }
 
+  input[type="search"]::placeholder { color: var(--texto-dim); }
+
   select {
-    height: 36px;
-    padding: 0 10px;
-    border: 1px solid #c9d2dd;
-    border-radius: 8px;
-    background: #ffffff;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    background: var(--superficie-2);
+    color: var(--texto);
     font-size: 14px;
   }
 }
 
 .panel-seccion {
-  background: #ffffff;
-  border: 1px solid #e5e9f0;
-  border-radius: 10px;
-  padding: 16px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 20px;
 
   h2 {
-    margin: 0 0 12px;
+    margin: 0 0 16px;
     font-size: 18px;
-    color: #111827;
+    color: var(--texto);
+    font-weight: 700;
+  }
+
+  p {
+    color: var(--texto-sec);
   }
 }
 
 .panel-lista {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 // ---------- TARJETA DE RESERVA ----------
 .reserva-card {
-  border: 1px solid #e5e9f0;
-  border-radius: 8px;
-  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 10px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  background: var(--superficie-2);
 
   .reserva-card-datos {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
     font-size: 14px;
-    color: #334155;
+    color: var(--texto);
     align-items: center;
   }
 
   .reserva-card-estado {
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 999px;
     font-size: 12px;
     font-weight: 600;
 
-    &.pendiente { background: #fef3c7; color: #92400e; }
-    &.confirmada { background: #dcfce7; color: #166534; }
-    &.cancelada { background: #fee2e2; color: #991b1b; }
+    &.pendiente { background: #78350f; color: #fde68a; }
+    &.confirmada { background: #14532d; color: #bbf7d0; }
+    &.cancelada { background: #7f1d1d; color: #fecaca; }
   }
 
   .reserva-card-acciones {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 
     button {
-      height: 30px !important;
-      padding: 0 12px !important;
+      height: 32px !important;
+      padding: 0 14px !important;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
-      color: #ffffff;
+      color: #0f172a;
+      transition: filter 0.15s ease;
 
-      &.btn-confirmar { background: #16a34a; }
-      &.btn-cancelar { background: #d97706; }
-      &.btn-borrar { background: #dc2626; }
-      &.btn-cambiar { background: #2563eb; }
+      &:hover { filter: brightness(1.1); }
+
+      &.btn-confirmar { background: var(--exito); }
+      &.btn-cancelar { background: #fbbf24; color: #422006; }
+      &.btn-borrar { background: var(--error); color: #450a0a; }
+      &.btn-cambiar { background: var(--primario); }
     }
   }
 
   .reserva-card-cambio {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
     align-items: center;
 
     input,
     select {
-      height: 32px;
-      padding: 0 8px;
-      border: 1px solid #c9d2dd;
-      border-radius: 6px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
       font-size: 13px;
-      background: #ffffff;
+      background: var(--superficie);
+      color: var(--texto);
+      color-scheme: dark;
     }
   }
 }
 
-// ---------- FORMULARIO DE RESERVA (inputs FINOS y rectangulares) ----------
+// ---------- FORMULARIO DE RESERVA ----------
 .reserva-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 
   label {
     font-size: 13px;
     font-weight: 600;
-    color: #334155;
+    color: var(--texto-sec);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
 
   input,
   select {
     width: 100%;
-    height: 34px !important;
+    height: 40px !important;
     min-height: 0 !important;
-    max-height: 34px !important;
-    padding: 0 10px !important;
-    border: 1px solid #c9d2dd !important;
-    border-radius: 6px;
+    max-height: 40px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--borde) !important;
+    border-radius: 10px;
     font-size: 14px;
     box-sizing: border-box;
-    background: #ffffff;
+    background: var(--superficie-2);
+    color: var(--texto);
+    transition: border-color 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primario) !important;
+    }
+  }
+
+  input::placeholder,
+  select:invalid { color: var(--texto-dim); }
+
+  input[type="date"],
+  input[type="time"] {
+    color-scheme: dark;
   }
 
   button {
-    height: 38px !important;
+    height: 42px !important;
     border: none;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff;
-    font-weight: 600;
+    border-radius: 10px;
+    background: var(--primario);
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 15px;
     cursor: pointer;
+    transition: background 0.15s ease;
+    &:hover { background: var(--primario-hover); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
 }
 
@@ -375,129 +444,168 @@
 .servicios-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 
   .servicio-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
-    border: 1px solid #e5e9f0;
-    border-radius: 8px;
-    padding: 8px 12px;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 10px 14px;
     font-size: 14px;
+    background: var(--superficie-2);
 
-    .servicio-nombre { font-weight: 600; color: #111827; }
-    .servicio-precio { color: #475569; }
+    .servicio-nombre { font-weight: 600; color: var(--texto); }
+    .servicio-precio { color: var(--texto-sec); }
 
     button {
-      height: 28px !important;
-      padding: 0 10px !important;
+      height: 30px !important;
+      padding: 0 12px !important;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
-      color: #ffffff;
+      color: #0f172a;
 
-      &.btn-editar { background: #2563eb; }
-      &.btn-borrar { background: #dc2626; }
-      &.btn-guardar { background: #16a34a; }
+      &.btn-editar { background: var(--primario); }
+      &.btn-borrar { background: var(--error); color: #450a0a; }
+      &.btn-guardar { background: var(--exito); }
     }
 
     input {
-      height: 28px !important;
-      max-height: 28px !important;
-      padding: 0 8px;
-      border: 1px solid #c9d2dd;
-      border-radius: 6px;
+      height: 32px !important;
+      max-height: 32px !important;
+      padding: 0 10px;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
       font-size: 13px;
+      background: var(--superficie);
+      color: var(--texto);
     }
   }
 
   .servicio-form {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: 12px;
 
     input {
-      height: 34px !important;
-      max-height: 34px !important;
-      padding: 0 10px;
-      border: 1px solid #c9d2dd;
-      border-radius: 6px;
+      height: 38px !important;
+      max-height: 38px !important;
+      padding: 0 12px;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
       font-size: 14px;
+      background: var(--superficie-2);
+      color: var(--texto);
     }
 
     button {
-      height: 34px !important;
-      padding: 0 14px !important;
+      height: 38px !important;
+      padding: 0 16px !important;
       border: none;
-      border-radius: 8px;
-      background: #16a34a;
-      color: #ffffff;
+      border-radius: 10px;
+      background: var(--exito);
+      color: #0f172a;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
+      &:hover { filter: brightness(1.1); }
     }
   }
 }
 
-// ---------- HORARIO (inputs FINOS, menos toscos) ----------
+// ---------- HORARIO (formulario viejo, por si aparece) ----------
 .horario-form {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
   align-items: flex-end;
 
   label {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     font-size: 13px;
     font-weight: 600;
-    color: #334155;
+    color: var(--texto-sec);
   }
 
   input {
     width: 150px;
-    height: 34px !important;
+    height: 38px !important;
     min-height: 0 !important;
-    max-height: 34px !important;
-    padding: 0 10px !important;
-    border: 1px solid #c9d2dd !important;
-    border-radius: 6px;
+    max-height: 38px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--borde) !important;
+    border-radius: 10px;
     font-size: 14px;
+    background: var(--superficie-2);
+    color: var(--texto);
+    color-scheme: dark;
   }
 
   button {
-    height: 34px !important;
-    padding: 0 14px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
     border: none;
-    border-radius: 8px;
-    background: #2563eb;
-    color: #ffffff;
+    border-radius: 10px;
+    background: var(--primario);
+    color: #0f172a;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
+    &:hover { background: var(--primario-hover); }
   }
 }
 
-// ---------- FOTOS DEL NEGOCIO (galería + subida) ----------
+// ---------- EDITOR SEMANAL (inputs inline del Reservas.js) ----------
+// Refuerzo por si algún estilo inline se cuela: fuerza el modo oscuro
+.horario-semana {
+  input[type="time"],
+  input[type="number"] {
+    background: var(--superficie-2) !important;
+    color: var(--texto) !important;
+    border: 1px solid var(--borde) !important;
+    color-scheme: dark;
+  }
+
+  input[type="checkbox"] {
+    accent-color: var(--primario);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  span {
+    color: var(--texto-sec) !important;
+  }
+
+  label {
+    color: var(--texto) !important;
+  }
+}
+
+// ---------- FOTOS DEL NEGOCIO ----------
 .fotos-galeria {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 
   .foto-marco {
     position: relative;
 
     img {
-      width: 110px;
-      height: 80px;
+      width: 120px;
+      height: 90px;
       object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #e5e9f0;
+      border-radius: 10px;
+      border: 1px solid var(--borde);
       display: block;
     }
 
@@ -505,13 +613,13 @@
       position: absolute;
       top: -8px;
       right: -8px;
-      width: 22px;
-      height: 22px !important;
+      width: 24px;
+      height: 24px !important;
       padding: 0 !important;
-      border: none;
+      border: 2px solid var(--superficie);
       border-radius: 50%;
-      background: #dc2626;
-      color: #ffffff;
+      background: var(--error);
+      color: #450a0a;
       font-size: 12px;
       line-height: 1;
       cursor: pointer;
@@ -521,23 +629,71 @@
 
 .fotos-subida {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
   flex-wrap: wrap;
 
   input[type="file"] {
     font-size: 13px;
     height: auto !important;
+    color: var(--texto-sec);
+  }
+
+  input[type="text"] {
+    height: 38px !important;
+    padding: 0 12px !important;
+    border: 1px solid var(--borde) !important;
+    border-radius: 10px;
+    background: var(--superficie-2);
+    color: var(--texto);
+    font-size: 14px;
   }
 
   button {
-    height: 34px !important;
-    padding: 0 14px !important;
+    height: 38px !important;
+    padding: 0 16px !important;
     border: none;
-    border-radius: 8px;
-    background: #16a34a;
-    color: #ffffff;
+    border-radius: 10px;
+    background: var(--exito);
+    color: #0f172a;
     font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    &:hover { filter: brightness(1.1); }
+  }
+}
+
+// ---------- RESPONSIVE ----------
+@media (max-width: 640px) {
+  .navbar {
+    padding: 10px 14px;
+    gap: 8px;
+    .navbar-marca { font-size: 15px; }
+    .navbar-usuario {
+      margin-left: 0;
+      width: 100%;
+      order: 99;
+      font-size: 12px;
+    }
+  }
+
+  .selector-tarjeta {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .panel {
+    padding: 14px;
+    gap: 18px;
+  }
+
+  .panel-seccion {
+    padding: 16px;
+  }
+
+  .horario-form input,
+  .horario-semana input[type="time"],
+  .horario-semana input[type="number"] {
+    width: 100%;
   }
 }

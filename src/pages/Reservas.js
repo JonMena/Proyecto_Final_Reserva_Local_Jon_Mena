@@ -84,7 +84,6 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     return s ? s.nombre : "Servicio " + id;
   };
 
-  // ---------- FUNCIÓN AUTODIDACTA: búsqueda + filtro dinámico (SOLO admin) ----------
   const reservasPorTexto = useMemo(function () {
     const texto = busqueda.trim().toLowerCase();
     if (!texto) return reservas;
@@ -120,7 +119,6 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     }
   }, [estadosDisponibles, filtroEstado]);
 
-  // ---------- Reservas ----------
   const manejarCrearReserva = async function (datos) {
     try {
       await crearReserva(datos);
@@ -155,7 +153,6 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     }
   };
 
-  // ---------- Servicios (admin) ----------
   const manejarCrearServicio = async function (datos) {
     try {
       const payload = {
@@ -191,7 +188,6 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     }
   };
 
-  // ---------- Horario SEMANAL (admin) ----------
   const manejarHorario = async function (datos) {
     try {
       const payload = {
@@ -206,7 +202,6 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     }
   };
 
-  // ---------- Perfil del negocio (admin): nombre + icono único ----------
   const manejarNombreNegocio = async function () {
     try {
       const resp = await actualizarNegocio(negocio.id, { nombre: nombreNegocio });
@@ -325,7 +320,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
 
           <section className="panel-seccion">
             <h2>Perfil del negocio</h2>
-            <div className="fotos-subida" style={{ marginBottom: 12 }}>
+            <div className="fotos-subida" style={{ marginBottom: 14 }}>
               <input
                 type="text"
                 value={nombreNegocio}
@@ -351,7 +346,10 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
               />
               <button onClick={manejarSubirIcono}>Subir icono</button>
               {negocio.icono_url && (
-                <button onClick={manejarQuitarIcono} style={{ background: "#dc2626" }}>
+                <button
+                  onClick={manejarQuitarIcono}
+                  style={{ background: "var(--error)", color: "#450a0a" }}
+                >
                   Quitar icono
                 </button>
               )}
@@ -371,7 +369,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
   );
 }
 
-// ---------- Editor de SEMANA: un fila por día ----------
+// ---------- Editor de SEMANA: una fila por día (MODO OSCURO) ----------
 function FormHorarioSemana({ horario, onGuardar }) {
   const [dias, setDias] = useState(horario);
 
@@ -390,22 +388,25 @@ function FormHorarioSemana({ horario, onGuardar }) {
     gap: 10,
     alignItems: "center",
     flexWrap: "wrap",
-    marginBottom: 8,
-    paddingBottom: 8,
-    borderBottom: "1px solid #eef1f5",
+    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottom: "1px solid var(--borde)",
   };
 
   const estiloInput = {
-    height: 34,
-    padding: "0 8px",
-    border: "1px solid #c9d2dd",
-    borderRadius: 6,
-    fontSize: 13,
-    background: "#ffffff",
+    height: 38,
+    padding: "0 10px",
+    border: "1px solid var(--borde)",
+    borderRadius: 10,
+    fontSize: 14,
+    background: "var(--superficie-2)",
+    color: "var(--texto)",
+    colorScheme: "dark",
   };
 
   return (
     <form
+      className="horario-semana"
       onSubmit={function (e) {
         e.preventDefault();
         onGuardar({ dias: dias });
@@ -419,10 +420,10 @@ function FormHorarioSemana({ horario, onGuardar }) {
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
-                width: 130,
+                width: 140,
                 fontSize: 14,
                 fontWeight: 700,
-                color: "#111827",
+                color: "var(--texto)",
                 textTransform: "capitalize",
               }}
             >
@@ -442,27 +443,27 @@ function FormHorarioSemana({ horario, onGuardar }) {
                   value={d.hora_apertura}
                   onChange={(e) => cambiarDia(i, "hora_apertura", e.target.value)}
                 />
-                <span style={{ color: "#667788" }}>a</span>
+                <span style={{ color: "var(--texto-sec)" }}>a</span>
                 <input
                   type="time"
                   style={estiloInput}
                   value={d.hora_cierre}
                   onChange={(e) => cambiarDia(i, "hora_cierre", e.target.value)}
                 />
-                <span style={{ color: "#667788", fontSize: 13 }}>cada</span>
+                <span style={{ color: "var(--texto-sec)", fontSize: 13 }}>cada</span>
                 <input
                   type="number"
-                  style={Object.assign({}, estiloInput, { width: 70 })}
+                  style={Object.assign({}, estiloInput, { width: 72 })}
                   min="5"
                   max="240"
                   step="5"
                   value={d.intervalo_minutos}
                   onChange={(e) => cambiarDia(i, "intervalo_minutos", e.target.value)}
                 />
-                <span style={{ color: "#667788", fontSize: 13 }}>min</span>
+                <span style={{ color: "var(--texto-sec)", fontSize: 13 }}>min</span>
               </React.Fragment>
             ) : (
-              <span style={{ color: "#9aa4b2", fontSize: 13, fontStyle: "italic" }}>
+              <span style={{ color: "var(--texto-dim)", fontSize: 13, fontStyle: "italic" }}>
                 Cerrado todo el día
               </span>
             )}
@@ -473,13 +474,13 @@ function FormHorarioSemana({ horario, onGuardar }) {
       <button
         type="submit"
         style={{
-          height: 38,
-          padding: "0 16px",
+          height: 42,
+          padding: "0 18px",
           border: "none",
-          borderRadius: 8,
-          background: "#2563eb",
-          color: "#ffffff",
-          fontWeight: 600,
+          borderRadius: 10,
+          background: "var(--primario)",
+          color: "#0f172a",
+          fontWeight: 700,
           cursor: "pointer",
         }}
       >

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { login, registro } from "../api";
 import { saveSession, setNegocio } from "../auth";
 
-// --- Icono SVG base (sin dependencias externas) ---
+// --- Icono SVG base ---
 const Icono = function ({ children }) {
   return (
     <svg
@@ -20,7 +20,7 @@ const Icono = function ({ children }) {
   );
 };
 
-// --- Iconos elocuentes para cada campo ---
+// --- Iconos de campos ---
 const iconoNombre = (
   <Icono>
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -44,14 +44,14 @@ const iconoEmail = (
   </Icono>
 );
 
-const iconoContrasena = (
+const iconoCandado = (
   <Icono>
     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
   </Icono>
 );
 
-const iconoRepite = (
+const iconoCandadoCheck = (
   <Icono>
     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -59,19 +59,52 @@ const iconoRepite = (
   </Icono>
 );
 
-const iconoCodigo = (
+const iconoEscudo = (
   <Icono>
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
     <path d="m9 12 2 2 4-4" />
   </Icono>
 );
 
-const iconoNegocio = (
+const iconoTienda = (
   <Icono>
     <path d="M4 4h16l1 5H3l1-5z" />
     <path d="M4 9v11h16V9" />
     <path d="M9 20v-6h6v6" />
   </Icono>
+);
+
+// --- Iconos de ojo (ver / ocultar contraseña) ---
+const iconoOjoAbierto = (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+
+const iconoOjoCerrado = (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+    <line x1="1" y1="1" x2="23" y2="23" />
+  </svg>
 );
 
 export default function Login({ onLogin }) {
@@ -86,12 +119,18 @@ export default function Login({ onLogin }) {
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
+  // --- Estados independientes para mostrar/ocultar cada contraseña ---
+  const [verPassword, setVerPassword] = useState(false);
+  const [verConfirmar, setVerConfirmar] = useState(false);
+
   const cambiarModo = (nuevo) => {
     setModo(nuevo);
     setError("");
     setConfirmar("");
     setCodigo("");
     setNombreNegocio("");
+    setVerPassword(false);
+    setVerConfirmar(false);
   };
 
   const enviar = async (e) => {
@@ -152,6 +191,20 @@ export default function Login({ onLogin }) {
     }
   };
 
+  // Estilo del botón del ojo (pestaña derecha dentro del campo)
+  const estiloOjo = {
+    background: "transparent",
+    border: "none",
+    padding: "0 12px",
+    cursor: "pointer",
+    color: "var(--texto-sec)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100%",
+    flexShrink: 0,
+  };
+
   return (
     <div className="login-contenedor">
       <form className="login-caja" onSubmit={enviar}>
@@ -168,6 +221,8 @@ export default function Login({ onLogin }) {
               <span className="login-icono" aria-hidden="true">{iconoNombre}</span>
               <input
                 type="text"
+                name="nombre"
+                autoComplete="given-name"
                 value={nombre}
                 placeholder="Nombre"
                 aria-label="Nombre"
@@ -179,6 +234,8 @@ export default function Login({ onLogin }) {
               <span className="login-icono" aria-hidden="true">{iconoApellidos}</span>
               <input
                 type="text"
+                name="apellidos"
+                autoComplete="family-name"
                 value={apellidos}
                 placeholder="Apellidos"
                 aria-label="Apellidos"
@@ -193,6 +250,8 @@ export default function Login({ onLogin }) {
           <span className="login-icono" aria-hidden="true">{iconoEmail}</span>
           <input
             type="email"
+            name="email"
+            autoComplete="email"
             value={email}
             placeholder="Email"
             aria-label="Email"
@@ -201,35 +260,61 @@ export default function Login({ onLogin }) {
           />
         </div>
 
+        {/* CONTRASEÑA PRINCIPAL (login y registro) con ojo */}
         <div className="login-campo">
-          <span className="login-icono" aria-hidden="true">{iconoContrasena}</span>
+          <span className="login-icono" aria-hidden="true">{iconoCandado}</span>
           <input
-            type="password"
+            type={verPassword ? "text" : "password"}
+            name="password"
+            autoComplete={modo === "login" ? "current-password" : "new-password"}
             value={password}
             placeholder="Contraseña"
             aria-label="Contraseña"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <button
+            type="button"
+            aria-label={verPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+            onClick={() => setVerPassword(!verPassword)}
+            style={estiloOjo}
+            tabIndex={-1}
+          >
+            {verPassword ? iconoOjoCerrado : iconoOjoAbierto}
+          </button>
         </div>
 
         {modo === "registro" && (
           <React.Fragment>
+            {/* REPETIR CONTRASEÑA con ojo */}
             <div className="login-campo">
-              <span className="login-icono" aria-hidden="true">{iconoRepite}</span>
+              <span className="login-icono" aria-hidden="true">{iconoCandadoCheck}</span>
               <input
-                type="password"
+                type={verConfirmar ? "text" : "password"}
+                name="confirm-password"
+                autoComplete="new-password"
                 value={confirmar}
                 placeholder="Repite la contraseña"
                 aria-label="Repite la contraseña"
                 onChange={(e) => setConfirmar(e.target.value)}
                 required
               />
+              <button
+                type="button"
+                aria-label={verConfirmar ? "Ocultar contraseña" : "Mostrar contraseña"}
+                onClick={() => setVerConfirmar(!verConfirmar)}
+                style={estiloOjo}
+                tabIndex={-1}
+              >
+                {verConfirmar ? iconoOjoCerrado : iconoOjoAbierto}
+              </button>
             </div>
             <div className="login-campo">
-              <span className="login-icono" aria-hidden="true">{iconoCodigo}</span>
+              <span className="login-icono" aria-hidden="true">{iconoEscudo}</span>
               <input
                 type="text"
+                name="codigo"
+                autoComplete="off"
                 value={codigo}
                 placeholder="Código de administrador (opcional)"
                 aria-label="Código de invitación"
@@ -237,9 +322,11 @@ export default function Login({ onLogin }) {
               />
             </div>
             <div className="login-campo">
-              <span className="login-icono" aria-hidden="true">{iconoNegocio}</span>
+              <span className="login-icono" aria-hidden="true">{iconoTienda}</span>
               <input
                 type="text"
+                name="nombre_negocio"
+                autoComplete="organization"
                 value={nombreNegocio}
                 placeholder="Nombre de tu negocio (solo con código)"
                 aria-label="Nombre de tu negocio"
@@ -264,7 +351,7 @@ export default function Login({ onLogin }) {
             padding: "4px",
             background: "transparent",
             border: "none",
-            color: "#2563eb",
+            color: "var(--primario)",
             fontSize: 13,
             cursor: "pointer",
             textDecoration: "underline",
@@ -280,7 +367,7 @@ export default function Login({ onLogin }) {
             style={{
               margin: "4px 0 0",
               fontSize: 12,
-              color: "#667788",
+              color: "var(--texto-sec)",
               textAlign: "center",
               lineHeight: 1.5,
             }}
