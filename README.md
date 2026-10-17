@@ -1,43 +1,85 @@
-# ReservaLocal Frontend
+# ReservaLocal 💈
 
-Aplicación SPA en React que consume la API REST de ReservaLocal, un sistema
-de reservas pensado para todo tipo de negocios locales. El sistema es genérico:
-cualquier negocio puede definir sus propios servicios. La instancia de ejemplo
-está configurada con los servicios de una peluquería.
-El usuario puede ver los servicios, crear reservas y confirmarlas, cancelarlas
-o eliminarlas, con una barra de búsqueda en vivo y filtros por estado.
-Proyecto final del curso de Desarrollo Full Stack (Maestro University / DevCamp).
+Plataforma web de reservas para negocios locales (peluquerías, barberías, consultas...).
+Los negocios publican sus servicios y su horario semanal. Los clientes reservan cita online.
 
-## Tecnologías
+Proyecto final de curso — Jon Mena (2026).
 
-- React (hooks y componentes de función)
-- JavaScript ES6+
-- Axios (cliente de la API)
-- Webpack (plantilla inicial de DevCamp)
-- SCSS para los estilos
-- Alojado en Netlify con despliegue automático desde GitHub
+---
 
-## Funcionalidades
+## 🧰 Tecnologías
 
-- Lista de servicios traída en vivo desde la API.
-- CRUD completo de reservas desde la interfaz: crear, confirmar, cancelar y eliminar.
-- Función autodidacta: barra de búsqueda en vivo que combina un filtro de texto
-  (nombre del cliente o fecha) con un filtro por estado de la reserva,
-  actualizando los resultados en cada tecla pulsada.
-- Diseño responsive apto para móvil mediante media queries de CSS.
+| Capa | Tecnología |
+|---|---|
+| Backend (API) | Python + Flask + SQLAlchemy |
+| Base de datos | MySQL/TiDB (local) · SQLite (servidor) |
+| Frontend | React (SPA) + SCSS |
+| Despliegue backend | PythonAnywhere |
+| Despliegue frontend | Netlify |
 
-## Cómo ejecutarlo en local
+---
 
-1. Clona este repositorio.
-2. Instala las dependencias: `npm install`.
-3. Arranca el servidor de desarrollo: `npm start`
-   (se abre en `http://localhost:3000`).
+## ✨ Funcionalidades
 
-La URL base de la API se configura en `src/api/index.js`.
+### Cuentas y roles
+- Registro con **nombre y apellidos** obligatorios.
+- Dos roles: **cliente** y **admin**.
+- Para crear un negocio al registrarse hay que usar un **código de administrador**.
+  - Código maestro: `1234`
+  - O códigos de un solo uso generados por cualquier admin (`/codigos`).
+- Validación cruzada: si escribes nombre de negocio sin código (o código sin nombre), el registro se bloquea con un mensaje claro.
+- Sesión por token (Bearer) guardado en el navegador.
 
-## Estructura del proyecto
+### Negocios (multi-negocio)
+- Cada admin es dueño de su propio negocio y solo ve/gestiona el suyo.
+- **Icono único** por negocio: el admin sube una imagen (png/jpg/gif/webp, máx. 5 MB) que aparece en la navbar y en el selector.
+- El cliente elige a qué negocio ir desde un **selector de tarjetas**.
 
-- `src/api/` - Cliente de la API (instancia de Axios y funciones de endpoints).
-- `src/components/` - Piezas de interfaz (lista de servicios, formulario de reserva, tarjeta de reserva, esqueleto de la app).
-- `src/pages/` - Pantallas (página de reservas con búsqueda y filtros).
-- `src/style/` - Estilos SCSS, incluidas las reglas responsive.
+### Horarios
+- **Horario semanal**: el admin configura cada uno de los 7 días (abierto/cerrado, hora de apertura, hora de cierre e intervalo de citas en minutos).
+- Los slots disponibles se generan dinámicamente según ese horario.
+- **Validación de pasado**: no se puede reservar en días u horas que ya pasaron (comprobado en el backend contra la hora del servidor).
+- Si el negocio está cerrado ese día, o el día ya pasó, el cliente recibe un mensaje claro.
+
+### Reservas
+- El cliente reserva eligiendo **servicio + día + hora disponible** (el nombre del cliente se toma automáticamente de su cuenta).
+- Tras reservar, el cliente vuelve al menú de negocios con un mensaje de confirmación (evita reservas masivas accidentales).
+- "Mis reservas": el cliente ve todas sus citas de todos los negocios, y puede **cambiar la hora**, **cancelar** o **eliminar**.
+- El admin ve la agenda completa de su negocio y puede **confirmar**, **cancelar**, **cambiar hora** o **eliminar** cualquier reserva.
+- Un mismo slot no puede reservarse dos veces (conflicto → error 409).
+- Buscador con filtros por texto y por estado (solo admin).
+
+### Interfaz
+- Tema **oscuro elegante** con acentos en azul cielo.
+- Iconos SVG propios (sin librerías externas).
+- Botón "ojo" para mostrar/ocultar la contraseña.
+- Notificaciones *toast* que desaparecen solas.
+- Diseño responsive (móvil y escritorio).
+
+---
+
+## 🔑 Cuentas de prueba
+
+Se crean automáticamente al visitar `/setup`.
+
+| Rol | Email | Contraseña | Negocio |
+|---|---|---|---|
+| Admin | `admin@reservalocal.com` | `Admin123.` | Peluquería Jon |
+| Admin | `admin2@reservalocal.com` | `Admin123.` | Barbería Central |
+| Cliente | `cliente@reservalocal.com` | `Cliente123!` | — |
+
+Código maestro para crear negocios nuevos: **`1234`**
+
+> ⚠️ Tras un `/reset` o `/reset-forzado` hay que cerrar sesión y volver a entrar: los tokens antiguos dejan de ser válidos.
+
+---
+
+## 🚀 Arranque en local
+
+### Backend
+```bash
+cd Reserva_Local_Backend
+python -m venv venv
+venv\Scripts\activate        # Windows
+pip install -r requirements.txt
+python app.py                # http://localhost:5000
