@@ -32,6 +32,17 @@ export default function ReservaCard({
     setHora("");
   };
 
+  // Para cliente: solo un botón que borra (con confirmación)
+  const cancelarReservaCliente = () => {
+    if (
+      window.confirm(
+        "¿Seguro que quieres cancelar esta reserva? Se eliminará por completo."
+      )
+    ) {
+      onBorrar();
+    }
+  };
+
   return (
     <article className="reserva-card">
       <div className="reserva-card-datos">
@@ -44,33 +55,45 @@ export default function ReservaCard({
       </div>
 
       <div className="reserva-card-acciones">
-        {modo === "admin" && reserva.estado !== "confirmada" && (
-          <button
-            className="btn-confirmar"
-            onClick={() => onActualizar({ estado: "confirmada" })}
-          >
-            Confirmar
-          </button>
+        {modo === "admin" ? (
+          // ---- ADMIN: todas las acciones ----
+          <React.Fragment>
+            {reserva.estado !== "confirmada" && (
+              <button
+                className="btn-confirmar"
+                onClick={() => onActualizar({ estado: "confirmada" })}
+              >
+                Confirmar
+              </button>
+            )}
+            {reserva.estado !== "cancelada" && (
+              <button
+                className="btn-cancelar"
+                onClick={() => onActualizar({ estado: "cancelada" })}
+              >
+                Cancelar
+              </button>
+            )}
+            {reserva.estado !== "cancelada" && (
+              <button
+                className="btn-cambiar"
+                onClick={() => setCambiando(!cambiando)}
+              >
+                Cambiar hora
+              </button>
+            )}
+            <button className="btn-borrar" onClick={onBorrar}>
+              Eliminar
+            </button>
+          </React.Fragment>
+        ) : (
+          // ---- CLIENTE: solo un botón, "Cancelar reserva" ----
+          reserva.estado !== "cancelada" && (
+            <button className="btn-borrar" onClick={cancelarReservaCliente}>
+              Cancelar reserva
+            </button>
+          )
         )}
-        {reserva.estado !== "cancelada" && (
-          <button
-            className="btn-cancelar"
-            onClick={() => onActualizar({ estado: "cancelada" })}
-          >
-            Cancelar
-          </button>
-        )}
-        {modo === "cliente" && reserva.estado !== "cancelada" && (
-          <button
-            className="btn-cambiar"
-            onClick={() => setCambiando(!cambiando)}
-          >
-            Cambiar hora
-          </button>
-        )}
-        <button className="btn-borrar" onClick={onBorrar}>
-          Eliminar
-        </button>
       </div>
 
       {cambiando && (

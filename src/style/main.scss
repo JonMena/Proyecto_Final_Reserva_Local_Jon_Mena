@@ -229,3 +229,55 @@ button:hover {
     border: 1px solid #991b1b;
   }
 }
+
+// --- LOGIN DIVIDIDO: marca grande izquierda + caja derecha ---
+.login-layout {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 70px;
+  padding: 24px;
+  background: var(--fondo);
+}
+
+.login-marca {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 430px;
+
+  h1 {
+    font-size: 68px;
+    line-height: 1.05;
+    font-weight: 800;
+    color: var(--texto);
+    letter-spacing: -1.5px;
+    margin: 0;
+  }
+
+  h1 span {
+    color: var(--primario);
+  }
+
+  p {
+    font-size: 15px;
+    color: var(--texto-sec);
+    line-height: 1.7;
+    margin: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .login-layout {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .login-marca {
+    align-items: center;
+
+    h1 { font-size: 44px; }
+  }
+}

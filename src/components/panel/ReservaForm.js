@@ -1,6 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { getServicios, getHorariosDisponibles } from "../../api";
 
+// --- Calcula "hoy + 1 mes natural" (ej: 31 ene -> 28/29 feb) ---
+function fechaMaximaUnMes() {
+  const hoy = new Date();
+  const mesSig = hoy.getMonth() + 1;
+  const anioSig = mesSig > 11 ? hoy.getFullYear() + 1 : hoy.getFullYear();
+  const mesNorm = mesSig > 11 ? 0 : mesSig;
+  // Último día del mes siguiente
+  const ultimoDiaMesSig = new Date(anioSig, mesNorm + 1, 0).getDate();
+  const diaLimite = Math.min(hoy.getDate(), ultimoDiaMesSig);
+  const maximo = new Date(anioSig, mesNorm, diaLimite);
+  const y = maximo.getFullYear();
+  const m = String(maximo.getMonth() + 1).padStart(2, "0");
+  const d = String(maximo.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + d;
+}
+
+function fechaMinimaHoy() {
+  return new Date().toISOString().split("T")[0];
+}
+
 // --- Formulario de reserva del cliente: carga SUS PROPIOS servicios ---
 export default function ReservaForm({ negocio, onCrear }) {
   const [servicios, setServicios] = useState([]);
@@ -70,7 +90,7 @@ export default function ReservaForm({ negocio, onCrear }) {
       <label>
         Servicio
         {cargandoServicios ? (
-          <p style={{ margin: 0, fontSize: 13, color: "#667788" }}>
+          <p style={{ margin: 0, fontSize: 13, color: "var(--texto-sec)" }}>
             Cargando servicios...
           </p>
         ) : (
@@ -92,10 +112,10 @@ export default function ReservaForm({ negocio, onCrear }) {
       </label>
 
       {errorServicios && (
-        <p style={{ margin: 0, fontSize: 13, color: "#b91c1c" }}>{errorServicios}</p>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--error)" }}>{errorServicios}</p>
       )}
       {!cargandoServicios && !errorServicios && servicios.length === 0 && (
-        <p style={{ margin: 0, fontSize: 13, color: "#b91c1c" }}>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--error)" }}>
           Este negocio aún no tiene servicios. El admin debe crearlos primero.
         </p>
       )}
@@ -105,10 +125,14 @@ export default function ReservaForm({ negocio, onCrear }) {
         <input
           type="date"
           value={dia}
-          min={new Date().toISOString().split("T")[0]}
+          min={fechaMinimaHoy()}
+          max={fechaMaximaUnMes()}
           onChange={(e) => setDia(e.target.value)}
           required
         />
+        <span style={{ fontSize: 12, color: "var(--texto-sec)", marginTop: 4 }}>
+          Puedes reservar hasta 1 mes de antelación.
+        </span>
       </label>
 
       <label>
@@ -137,10 +161,10 @@ export default function ReservaForm({ negocio, onCrear }) {
       </label>
 
       {errorSlots && (
-        <p style={{ margin: 0, fontSize: 13, color: "#b91c1c" }}>{errorSlots}</p>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--error)" }}>{errorSlots}</p>
       )}
       {dia && !cargandoSlots && slots.length === 0 && !errorSlots && (
-        <p style={{ margin: 0, fontSize: 13, color: "#b91c1c" }}>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--error)" }}>
           No quedan horas libres ese día. Prueba con otro día.
         </p>
       )}
