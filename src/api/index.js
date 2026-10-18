@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// --- Cable inteligente: local en desarrollo, servidor en producción ---
+// Cable inteligente: local en desarrollo, servidor en producción
 const baseURL =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getHorariosDisponibles } from "../../api";
 
-// --- Convierte "YYYY-MM-DD HH:MM" (formato interno) a "DD/MM/YYYY HH:MM" (España) ---
+// la base de datos guarda "2026-11-10 13:00"; aquí lo paso a "10/11/2026 13:00"
 function formatearFechaEsp(fecha) {
   if (!fecha) return "";
   const partes = fecha.split(" ");
@@ -14,7 +14,7 @@ function formatearFechaEsp(fecha) {
   return dia + "/" + mes + "/" + anio + hora;
 }
 
-// --- Límites de fecha coherentes con el resto de la app ---
+// mismo tope de un mes que usa el formulario de reserva
 function fechaMaximaUnMes() {
   const hoy = new Date();
   const mesSig = hoy.getMonth() + 1;
@@ -33,9 +33,7 @@ function fechaMinimaHoy() {
   return new Date().toISOString().split("T")[0];
 }
 
-// --- Tarjeta de reserva con acciones según el rol ---
-// ADMIN: Confirmar / Cancelar / Eliminar (NUNCA cambia la fecha)
-// CLIENTE: Cambiar hora + Cancelar (si activa) / Eliminar (si cancelada)
+// tarjeta de una reserva; los botones cambian según seas admin o cliente
 export default function ReservaCard({
   reserva,
   modo,
@@ -50,7 +48,7 @@ export default function ReservaCard({
   const [slots, setSlots] = useState([]);
   const [cargandoSlots, setCargandoSlots] = useState(false);
 
-  // Carga las horas libres del día elegido al cambiar la hora
+  // si el cliente cambia de día mientras reagenda, recarga las horas libres
   useEffect(() => {
     setHora("");
     setSlots([]);
@@ -95,7 +93,7 @@ export default function ReservaCard({
 
       <div className="reserva-card-acciones">
         {modo === "admin" ? (
-          // ---- ADMIN: flujo por estado, sin tocar fecha ----
+          // el admin gestiona el estado, nunca la fecha
           <React.Fragment>
             {estado === "pendiente" && (
               <React.Fragment>
@@ -143,7 +141,7 @@ export default function ReservaCard({
             )}
           </React.Fragment>
         ) : (
-          // ---- CLIENTE: cambiar hora / cancelar / eliminar ----
+          // el cliente puede reagendar, cancelar o limpiar las canceladas
           <React.Fragment>
             {(estado === "pendiente" || estado === "confirmada") && (
               <React.Fragment>
@@ -185,7 +183,7 @@ export default function ReservaCard({
         )}
       </div>
 
-      {/* Selector de nueva fecha/hora (solo cliente) */}
+      {/* caja para cambiar la hora, solo cliente */}
       {cambiando && modo === "cliente" && (
         <div className="reserva-card-cambio">
           <input

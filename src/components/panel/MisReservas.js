@@ -8,7 +8,7 @@ import {
 } from "../../api";
 import ReservaCard from "./ReservaCard";
 
-// --- Casa del cliente: todas sus reservas, de todos los negocios ---
+// casa del cliente: aquí ve todas sus reservas, de todos los negocios
 export default function MisReservas({ usuario }) {
   const [reservas, setReservas] = useState([]);
   const [negocios, setNegocios] = useState([]);
@@ -30,6 +30,7 @@ export default function MisReservas({ usuario }) {
     }, 3000);
   };
 
+  // trae reservas y negocios a la vez
   const cargar = useCallback(async function () {
     try {
       const resultados = await Promise.all([getReservas(), getNegocios()]);
@@ -44,7 +45,8 @@ export default function MisReservas({ usuario }) {
     cargar();
   }, [cargar]);
 
-  // Carga los servicios de los negocios que aparecen en las reservas
+  // carga los servicios solo de los negocios que aparecen en las reservas,
+  // para poder pintar el nombre del servicio en cada tarjeta
   useEffect(function () {
     const ids = [];
     reservas.forEach(function (r) {
@@ -129,12 +131,13 @@ export default function MisReservas({ usuario }) {
           {reservas.map(function (r) {
             return (
               <React.Fragment key={r.id}>
+                {/* nombre del negocio encima de cada reserva */}
                 <p
                   style={{
                     margin: "4px 0 0",
                     fontSize: 13,
                     fontWeight: 700,
-                    color: "#2563eb",
+                    color: "var(--primario)",
                   }}
                 >
                   {nombreNegocio(r.negocio_id)}

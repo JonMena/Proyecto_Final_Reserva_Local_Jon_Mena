@@ -1,8 +1,6 @@
-// ============================================================
-// ESTILOS DE RESERVA LOCAL: modo oscuro elegante
-// ============================================================
+// estilos de los paneles, el selector de negocios, los toasts y las fotos
 
-// ---------- LOGIN: override para unificar tamaños ----------
+// login: unifico el tamaño de todos los campos
 .login-caja {
   input {
     width: 100% !important;
@@ -51,7 +49,7 @@
   }
 }
 
-// ---------- NAVBAR ----------
+// barra superior
 .navbar {
   display: flex;
   align-items: center;
@@ -113,7 +111,7 @@
   }
 }
 
-// ---------- SELECTOR DE NEGOCIOS ----------
+// selector de negocios al entrar como cliente
 .selector-contenedor {
   min-height: 100vh;
   display: flex;
@@ -204,7 +202,7 @@
   }
 }
 
-// ---------- TOASTS ----------
+// avisos que aparecen arriba y se van solos
 .toast-contenedor {
   position: fixed;
   top: 20px;
@@ -241,7 +239,7 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-// ---------- PANEL GENERAL ----------
+// contenedor general del panel
 .panel {
   max-width: 940px;
   margin: 0 auto;
@@ -306,7 +304,7 @@
   gap: 12px;
 }
 
-// ---------- TARJETA DE RESERVA ----------
+// tarjeta de una reserva
 .reserva-card {
   border: 1px solid var(--borde);
   border-radius: 10px;
@@ -361,6 +359,7 @@
     }
   }
 
+  // la cajita que se despliega al cambiar la hora
   .reserva-card-cambio {
     display: flex;
     gap: 10px;
@@ -381,7 +380,7 @@
   }
 }
 
-// ---------- FORMULARIO DE RESERVA ----------
+// formulario de reserva del cliente
 .reserva-form {
   display: flex;
   flex-direction: column;
@@ -420,6 +419,7 @@
   input::placeholder,
   select:invalid { color: var(--texto-dim); }
 
+  // el calendario y el reloj nativos, en oscuro
   input[type="date"],
   input[type="time"] {
     color-scheme: dark;
@@ -440,7 +440,7 @@
   }
 }
 
-// ---------- SERVICIOS ----------
+// lista de servicios del admin
 .servicios-list {
   display: flex;
   flex-direction: column;
@@ -519,7 +519,7 @@
   }
 }
 
-// ---------- HORARIO (formulario viejo, por si aparece) ----------
+// horario (formulario antiguo, por si aparece en algún sitio)
 .horario-form {
   display: flex;
   gap: 14px;
@@ -563,8 +563,8 @@
   }
 }
 
-// ---------- EDITOR SEMANAL (inputs inline del Reservas.js) ----------
-// Refuerzo por si algún estilo inline se cuela: fuerza el modo oscuro
+// editor semanal del admin (los inputs van por estilo inline en Reservas.js,
+// aquí solo refuerzo por si alguno se cuela)
 .horario-semana {
   input[type="time"],
   input[type="number"] {
@@ -590,7 +590,7 @@
   }
 }
 
-// ---------- FOTOS DEL NEGOCIO ----------
+// icono y fotos del negocio
 .fotos-galeria {
   display: flex;
   gap: 12px;
@@ -609,6 +609,7 @@
       display: block;
     }
 
+    // la crucecita roja para quitar la foto
     button {
       position: absolute;
       top: -8px;
@@ -663,7 +664,7 @@
   }
 }
 
-// ---------- RESPONSIVE ----------
+// móvil
 @media (max-width: 640px) {
   .navbar {
     padding: 10px 14px;

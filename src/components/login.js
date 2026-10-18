@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { login, registro } from "../api";
 import { saveSession, setNegocio } from "../auth";
 
+// svg pequeño que reutilizo para todos los iconos
 const Icono = function ({ children }) {
   return (
     <svg
@@ -19,6 +20,7 @@ const Icono = function ({ children }) {
   );
 };
 
+// icono de cada campo del formulario
 const iconoNombre = (
   <Icono>
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -72,6 +74,7 @@ const iconoTienda = (
   </Icono>
 );
 
+// ojo abierto y ojo tachado, para mostrar u ocultar la contraseña
 const iconoOjoAbierto = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
     strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -99,6 +102,7 @@ export default function Login({ onLogin }) {
   const [nombreNegocio, setNombreNegocio] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
+  // cada contraseña tiene su propio ojo, no se pisan entre ellas
   const [verPassword, setVerPassword] = useState(false);
   const [verConfirmar, setVerConfirmar] = useState(false);
 
@@ -125,13 +129,14 @@ export default function Login({ onLogin }) {
         return;
       }
 
+      // el código y el nombre del negocio van juntos o no van
       if (hayNegocio && !hayCodigo) {
-        setError("Para crear un negocio necesitas un codigo de administrador. Pon el codigo o deja vacio el nombre del negocio.");
+        setError("Para crear un negocio necesitas un código de administrador. Pon el código o deja vacío el nombre del negocio.");
         return;
       }
 
       if (hayCodigo && !hayNegocio) {
-        setError("Si usas un codigo de admin, indica el nombre de tu negocio.");
+        setError("Si usas un código de admin, indica el nombre de tu negocio.");
         return;
       }
     }
@@ -185,7 +190,7 @@ export default function Login({ onLogin }) {
 
   return (
     <div className="login-layout">
-      {/* MARCA GRANDE A LA IZQUIERDA */}
+      {/* título grande a la izquierda */}
       <div className="login-marca">
         <h1>
           Reserva<br />
@@ -197,7 +202,7 @@ export default function Login({ onLogin }) {
         </p>
       </div>
 
-      {/* CAJA DEL FORMULARIO A LA DERECHA */}
+      {/* el formulario, a la derecha */}
       <form className="login-caja" onSubmit={enviar}>
         <p className="login-subtitulo">
           {modo === "login"

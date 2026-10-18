@@ -1,5 +1,5 @@
 html {
-    font-size: 62.5%; // 1rem is 10px
+    font-size: 62.5%; // 1rem = 10px
 }
 
 *,
@@ -11,22 +11,22 @@ html {
     font-family: 'montserrat';
 }
 
-// --- PALETA OSCURA ELEGANTE (variables accesibles) ---
+// paleta del modo oscuro, la uso en toda la app con var(--...)
 :root {
-  --fondo: #0f172a;           // azul noche
-  --superficie: #1e293b;      // tarjetas, paneles
-  --superficie-2: #334155;    // inputs, superficies elevadas
+  --fondo: #0f172a;           // azul noche, el fondo general
+  --superficie: #1e293b;      // tarjetas y paneles
+  --superficie-2: #334155;    // inputs y superficies elevadas
   --borde: #334155;           // bordes sutiles
-  --primario: #38bdf8;        // azul cielo
+  --primario: #38bdf8;        // azul cielo, botones y enlaces
   --primario-hover: #0ea5e9;
-  --acento: #a78bfa;          // violeta suave
+  --acento: #a78bfa;          // violeta suave, para detalles
   --exito: #34d399;           // verde menta
   --exito-bg: #064e3b;
   --error: #f87171;           // rojo suave
   --error-bg: #7f1d1d;
   --texto: #e2e8f0;
-  --texto-sec: #94a3b8;
-  --texto-dim: #64748b;
+  --texto-sec: #94a3b8;       // texto secundario
+  --texto-dim: #64748b;       // texto muy tenue (placeholders)
 }
 
 body {
@@ -47,7 +47,7 @@ body {
     justify-items: center;
 }
 
-// ===== Estilos ReservaLocal (modo oscuro) =====
+// estilos generales de la app
 .contenedor {
   max-width: 720px;
   margin: 0 auto;
@@ -121,7 +121,7 @@ button:hover {
   }
 }
 
-// --- LOGIN modo oscuro ---
+// login
 .login-contenedor {
   min-height: 100vh;
   display: flex;
@@ -196,6 +196,7 @@ button:hover {
       color: var(--texto-dim);
     }
 
+    // resalto el campo cuando está escribiendo en él
     &:focus-within {
       border-color: var(--primario);
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
@@ -230,7 +231,7 @@ button:hover {
   }
 }
 
-// --- LOGIN DIVIDIDO: marca grande izquierda + caja derecha ---
+// login dividido: título grande a la izquierda, formulario a la derecha
 .login-layout {
   min-height: 100vh;
   display: flex;
@@ -268,6 +269,7 @@ button:hover {
   }
 }
 
+// en pantallas estrechas lo apilo: título arriba, caja debajo
 @media (max-width: 860px) {
   .login-layout {
     flex-direction: column;

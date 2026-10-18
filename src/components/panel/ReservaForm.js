@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getServicios, getHorariosDisponibles, getReservas } from "../../api";
 
-// --- Calcula "hoy + 1 mes natural" (ej: 31 ene -> 28/29 feb) ---
+// tope del calendario: como mucho un mes por delante
+// (si hoy es 31 de enero, el máximo es 28 o 29 de febrero, no marzo)
 function fechaMaximaUnMes() {
   const hoy = new Date();
   const mesSig = hoy.getMonth() + 1;
@@ -20,11 +21,12 @@ function fechaMinimaHoy() {
   return new Date().toISOString().split("T")[0];
 }
 
-// --- Formulario de reserva del cliente ---
+// formulario de reserva del cliente
 export default function ReservaForm({ negocio, onCrear }) {
   const [servicios, setServicios] = useState([]);
   const [cargandoServicios, setCargandoServicios] = useState(true);
   const [errorServicios, setErrorServicios] = useState("");
+  // servicios que el cliente ya tiene reservados aquí, para no dejarle repetir
   const [serviciosReservados, setServiciosReservados] = useState([]);
 
   const [servicioId, setServicioId] = useState("");
@@ -34,7 +36,7 @@ export default function ReservaForm({ negocio, onCrear }) {
   const [cargandoSlots, setCargandoSlots] = useState(false);
   const [errorSlots, setErrorSlots] = useState("");
 
-  // Carga los servicios de ESTE negocio al montar
+  // al abrir, trae los servicios de este negocio
   useEffect(function () {
     setCargandoServicios(true);
     setErrorServicios("");
@@ -50,7 +52,7 @@ export default function ReservaForm({ negocio, onCrear }) {
       });
   }, [negocio.id]);
 
-  // Carga las reservas ACTIVAS del cliente en este negocio para bloquear duplicados
+  // mira si el cliente ya tiene alguna reserva activa de cada servicio
   useEffect(function () {
     getReservas()
       .then(function (resp) {
@@ -71,7 +73,7 @@ export default function ReservaForm({ negocio, onCrear }) {
       });
   }, [negocio.id]);
 
-  // Carga las horas libres al elegir día
+  // al elegir día, carga las horas libres de ese día
   useEffect(function () {
     setHora("");
     setSlots([]);

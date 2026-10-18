@@ -20,6 +20,7 @@ import ReservaCard from "../components/panel/ReservaCard";
 import ServiciosList from "../components/panel/ServiciosList";
 import "../style/paneles.scss";
 
+// panel principal dentro de un negocio: lo que ve el admin o el cliente
 export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioActualizado }) {
   const esAdmin = usuario.rol === "admin";
 
@@ -36,6 +37,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     setNombreNegocio(negocio.nombre);
   }, [negocio.nombre]);
 
+  // añade un toast y lo quita solo a los 3 segundos
   const pushToast = function (mensaje, tipo) {
     const id = Date.now() + Math.random();
     const nuevo = { id: id, mensaje: mensaje, tipo: tipo };
@@ -51,11 +53,13 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     }, 3000);
   };
 
+  // coge el mensaje de error que manda el backend, o uno por defecto
   const errorDe = function (e, porDefecto) {
     const msg = e.response && e.response.data && e.response.data.error;
     return msg || porDefecto;
   };
 
+  // recarga servicios y reservas a la vez
   const cargarTodo = useCallback(async function () {
     try {
       const resultados = await Promise.all([
@@ -79,11 +83,13 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
       .catch(function () { setHorario(null); });
   }, [negocio.id]);
 
+  // nombre de un servicio a partir de su id
   const nombreServicio = function (id) {
     const s = servicios.find(function (x) { return x.id === id; });
     return s ? s.nombre : "Servicio " + id;
   };
 
+  // filtra por el texto del buscador (cliente, fecha o servicio)
   const reservasPorTexto = useMemo(function () {
     const texto = busqueda.trim().toLowerCase();
     if (!texto) return reservas;
@@ -96,6 +102,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     });
   }, [busqueda, reservas, servicios]);
 
+  // lista de estados que existen ahora mismo, para el desplegable del filtro
   const estadosDisponibles = useMemo(function () {
     const vistos = reservasPorTexto.map(function (r) { return r.estado; });
     const unicos = [];
@@ -105,6 +112,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     return ["todos"].concat(unicos);
   }, [reservasPorTexto]);
 
+  // aplica el filtro de estado encima del filtro de texto
   const reservasVisibles = useMemo(function () {
     if (!esAdmin) return reservas;
     if (filtroEstado === "todos") return reservasPorTexto;
@@ -113,6 +121,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
     });
   }, [reservasPorTexto, filtroEstado, esAdmin, reservas]);
 
+  // si el estado filtrado desaparece (ej: borras la última cancelada), vuelve a "todos"
   useEffect(function () {
     if (filtroEstado !== "todos" && estadosDisponibles.indexOf(filtroEstado) === -1) {
       setFiltroEstado("todos");
@@ -369,7 +378,7 @@ export default function Reservas({ usuario, negocio, onReservaCreada, onNegocioA
   );
 }
 
-// ---------- Editor de SEMANA: una fila por día (MODO OSCURO) ----------
+// editor del horario semanal: una fila por día con su checkbox y sus horas
 function FormHorarioSemana({ horario, onGuardar }) {
   const [dias, setDias] = useState(horario);
 
