@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getHorariosDisponibles } from "../../api";
 
+// --- Convierte "YYYY-MM-DD HH:MM" (formato interno) a "DD/MM/YYYY HH:MM" (España) ---
+function formatearFechaEsp(fecha) {
+  if (!fecha) return "";
+  const partes = fecha.split(" ");
+  const ymd = partes[0].split("-");
+  if (ymd.length !== 3) return fecha;
+  const anio = ymd[0];
+  const mes = ymd[1];
+  const dia = ymd[2];
+  const hora = partes[1] ? " " + partes[1] : "";
+  return dia + "/" + mes + "/" + anio + hora;
+}
+
 // --- Límites de fecha coherentes con el resto de la app ---
 function fechaMaximaUnMes() {
   const hoy = new Date();
@@ -76,7 +89,7 @@ export default function ReservaCard({
       <div className="reserva-card-datos">
         <strong>{nombreServicio}</strong>
         <span>Cliente: {reserva.cliente}</span>
-        <span>Fecha: {reserva.fecha}</span>
+        <span>Fecha: {formatearFechaEsp(reserva.fecha)}</span>
         <span className={"reserva-card-estado " + estado}>{estado}</span>
       </div>
 
