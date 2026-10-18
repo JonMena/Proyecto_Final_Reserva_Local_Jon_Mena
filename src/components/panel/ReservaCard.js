@@ -1,38 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { getHorariosDisponibles } from "../../api";
+import React from "react";
 
 // --- Tarjeta de reserva con acciones según el rol ---
+// ADMIN: Confirmar / Cancelar / Eliminar  (NUNCA cambiar la fecha)
+// CLIENTE: Cancelar reserva (la elimina tras confirmar)
 export default function ReservaCard({
   reserva,
   modo,
-  negocioId,
   nombreServicio,
   onActualizar,
   onBorrar,
 }) {
-  const [cambiando, setCambiando] = useState(false);
-  const [dia, setDia] = useState("");
-  const [hora, setHora] = useState("");
-  const [slots, setSlots] = useState([]);
-
-  useEffect(() => {
-    setHora("");
-    setSlots([]);
-    if (!dia) return;
-    getHorariosDisponibles(dia, negocioId)
-      .then((resp) => setSlots(resp.data.slots))
-      .catch(() => setSlots([]));
-  }, [dia, negocioId]);
-
-  const confirmarCambio = () => {
-    if (!dia || !hora) return;
-    onActualizar({ fecha: dia + " " + hora, estado: "pendiente" });
-    setCambiando(false);
-    setDia("");
-    setHora("");
-  };
-
-  // Para cliente: solo un botón que borra (con confirmación)
   const cancelarReservaCliente = () => {
     if (
       window.confirm(
@@ -56,7 +33,6 @@ export default function ReservaCard({
 
       <div className="reserva-card-acciones">
         {modo === "admin" ? (
-          // ---- ADMIN: todas las acciones ----
           <React.Fragment>
             {reserva.estado !== "confirmada" && (
               <button
@@ -74,20 +50,11 @@ export default function ReservaCard({
                 Cancelar
               </button>
             )}
-            {reserva.estado !== "cancelada" && (
-              <button
-                className="btn-cambiar"
-                onClick={() => setCambiando(!cambiando)}
-              >
-                Cambiar hora
-              </button>
-            )}
             <button className="btn-borrar" onClick={onBorrar}>
               Eliminar
             </button>
           </React.Fragment>
         ) : (
-          // ---- CLIENTE: solo un botón, "Cancelar reserva" ----
           reserva.estado !== "cancelada" && (
             <button className="btn-borrar" onClick={cancelarReservaCliente}>
               Cancelar reserva
@@ -95,35 +62,6 @@ export default function ReservaCard({
           )
         )}
       </div>
-
-      {cambiando && (
-        <div className="reserva-card-cambio">
-          <input
-            type="date"
-            value={dia}
-            onChange={(e) => setDia(e.target.value)}
-          />
-          <select
-            value={hora}
-            onChange={(e) => setHora(e.target.value)}
-            disabled={!dia}
-          >
-            <option value="">Elige hora...</option>
-            {slots.map((h) => (
-              <option key={h} value={h}>
-                {h}
-              </option>
-            ))}
-          </select>
-          <button
-            className="btn-confirmar"
-            onClick={confirmarCambio}
-            disabled={!hora}
-          >
-            Guardar nueva hora
-          </button>
-        </div>
-      )}
     </article>
   );
 }
