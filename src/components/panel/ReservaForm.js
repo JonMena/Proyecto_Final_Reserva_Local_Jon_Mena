@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getServicios, getHorariosDisponibles } from "../../api";
+import { getServicios, getHorariosDisponibles, getReservas } from "../../api";
 
 // --- Calcula "hoy + 1 mes natural" (ej: 31 ene -> 28/29 feb) ---
 function fechaMaximaUnMes() {
@@ -7,7 +7,6 @@ function fechaMaximaUnMes() {
   const mesSig = hoy.getMonth() + 1;
   const anioSig = mesSig > 11 ? hoy.getFullYear() + 1 : hoy.getFullYear();
   const mesNorm = mesSig > 11 ? 0 : mesSig;
-  // Último día del mes siguiente
   const ultimoDiaMesSig = new Date(anioSig, mesNorm + 1, 0).getDate();
   const diaLimite = Math.min(hoy.getDate(), ultimoDiaMesSig);
   const maximo = new Date(anioSig, mesNorm, diaLimite);
@@ -21,11 +20,12 @@ function fechaMinimaHoy() {
   return new Date().toISOString().split("T")[0];
 }
 
-// --- Formulario de reserva del cliente: carga SUS PROPIOS servicios ---
+// --- Formulario de reserva del cliente ---
 export default function ReservaForm({ negocio, onCrear }) {
   const [servicios, setServicios] = useState([]);
   const [cargandoServicios, setCargandoServicios] = useState(true);
   const [errorServicios, setErrorServicios] = useState("");
+  const [serviciosReservados, setServiciosReservados] = useState([]);
 
   const [servicioId, setServicioId] = useState("");
   const [dia, setDia] = useState("");
@@ -47,6 +47,27 @@ export default function ReservaForm({ negocio, onCrear }) {
       })
       .finally(function () {
         setCargandoServicios(false);
+      });
+  }, [negocio.id]);
+
+  // Carga las reservas ACTIVAS del cliente en este negocio para bloquear duplicados
+  useEffect(function () {
+    getReservas()
+      .then(function (resp) {
+        const activos = resp.data
+          .filter(function (r) {
+            return (
+              r.negocio_id === negocio.id &&
+              (r.estado === "pendiente" || r.estado === "confirmada")
+            );
+          })
+          .map(function (r) {
+            return r.servicio_id;
+          });
+        setServiciosReservados(activos);
+      })
+      .catch(function () {
+        setServiciosReservados([]);
       });
   }, [negocio.id]);
 
@@ -101,9 +122,11 @@ export default function ReservaForm({ negocio, onCrear }) {
           >
             <option value="">Elige un servicio...</option>
             {servicios.map(function (s) {
+              const yaReservado = serviciosReservados.indexOf(s.id) !== -1;
               return (
-                <option key={s.id} value={s.id}>
+                <option key={s.id} value={s.id} disabled={yaReservado}>
                   {s.nombre} - {s.precio} €
+                  {yaReservado ? " (ya reservado)" : ""}
                 </option>
               );
             })}
@@ -119,6 +142,16 @@ export default function ReservaForm({ negocio, onCrear }) {
           Este negocio aún no tiene servicios. El admin debe crearlos primero.
         </p>
       )}
+      {!cargandoServicios &&
+        servicios.length > 0 &&
+        servicios.every(function (s) {
+          return serviciosReservados.indexOf(s.id) !== -1;
+        }) && (
+          <p style={{ margin: 0, fontSize: 13, color: "var(--texto-sec)" }}>
+            Ya tienes una reserva activa de cada servicio de este negocio.
+            Cancela alguna si quieres pedir otra cita.
+          </p>
+        )}
 
       <label>
         Día
