@@ -1,8 +1,8 @@
 import React from "react";
 
 // --- Tarjeta de reserva con acciones según el rol ---
-// ADMIN: flujo lógico Confirmar -> Cancelar -> Confirmar/Eliminar
-// CLIENTE: solo Cancelar reserva (la elimina tras confirmar)
+// ADMIN: flujo Confirmar -> Cancelar -> Confirmar/Eliminar
+// CLIENTE: Cancelar reserva (si no está cancelada) / Eliminar (si ya está cancelada)
 export default function ReservaCard({
   reserva,
   modo,
@@ -10,10 +10,10 @@ export default function ReservaCard({
   onActualizar,
   onBorrar,
 }) {
-  const cancelarReservaCliente = () => {
+  const eliminarConConfirmacion = () => {
     if (
       window.confirm(
-        "¿Seguro que quieres cancelar esta reserva? Se eliminará por completo."
+        "¿Seguro que quieres eliminar esta reserva del todo?"
       )
     ) {
       onBorrar();
@@ -35,8 +35,9 @@ export default function ReservaCard({
 
       <div className="reserva-card-acciones">
         {modo === "admin" ? (
+          // ---- ADMIN: flujo por estado ----
           <React.Fragment>
-            {/* PENDIENTE: puede confirmar o cancelar */}
+            {/* PENDIENTE: confirmar o cancelar */}
             {estado === "pendiente" && (
               <React.Fragment>
                 <button
@@ -54,7 +55,7 @@ export default function ReservaCard({
               </React.Fragment>
             )}
 
-            {/* CONFIRMADA: solo puede cancelar */}
+            {/* CONFIRMADA: solo cancelar */}
             {estado === "confirmada" && (
               <button
                 className="btn-cancelar"
@@ -64,7 +65,7 @@ export default function ReservaCard({
               </button>
             )}
 
-            {/* CANCELADA: puede reactivar (confirmar) o eliminar del todo */}
+            {/* CANCELADA: reactivar o eliminar del todo */}
             {estado === "cancelada" && (
               <React.Fragment>
                 <button
@@ -80,11 +81,30 @@ export default function ReservaCard({
             )}
           </React.Fragment>
         ) : (
-          estado !== "cancelada" && (
-            <button className="btn-borrar" onClick={cancelarReservaCliente}>
-              Cancelar reserva
-            </button>
-          )
+          // ---- CLIENTE: Cancelar si está activa, Eliminar si ya está cancelada ----
+          <React.Fragment>
+            {(estado === "pendiente" || estado === "confirmada") && (
+              <button
+                className="btn-cancelar"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "¿Seguro que quieres cancelar esta reserva? Quedará marcada como cancelada."
+                    )
+                  ) {
+                    onActualizar({ estado: "cancelada" });
+                  }
+                }}
+              >
+                Cancelar reserva
+              </button>
+            )}
+            {estado === "cancelada" && (
+              <button className="btn-borrar" onClick={eliminarConConfirmacion}>
+                Eliminar
+              </button>
+            )}
+          </React.Fragment>
         )}
       </div>
     </article>
