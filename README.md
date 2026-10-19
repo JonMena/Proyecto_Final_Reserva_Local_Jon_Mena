@@ -34,6 +34,7 @@ Los negocios publican sus servicios y su horario semanal. Los clientes reservan 
 - Tambien podrá editarlos y cambiar sus caracteristicas.
 - **Icono único** por negocio: el admin sube una imagen (png/jpg/gif/webp, máx. 5 MB) que aparece en la navbar y en el selector.
 - El cliente elige a qué negocio ir desde un **selector de tarjetas**.
+- El admin tambien podrá editar el nombre de su negocio cuando le plazca.
 
 ### Horarios
 - **Horario semanal**: el admin configura cada uno de los 7 días (abierto/cerrado, hora de apertura, hora de cierre e intervalo de citas en minutos).
