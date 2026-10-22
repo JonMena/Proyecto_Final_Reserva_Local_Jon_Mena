@@ -11,6 +11,16 @@ Si ya tienes cuenta, introduce tu email y contraseña y pulsa **Entrar**.
 
 ![alt text](./imagenes/pantallaLogin.png)
 
+
+### Cuentas para probar la web
+
+| Rol | Email | Contraseña | Negocio |
+|---|---|---|---|
+| Administrador | `admin@reservalocal.com` | `Admin123.` | Peluquería Jon |
+| Administrador | `admin2@reservalocal.com` | `Admin123.` | Barbería Central |
+| Cliente | `cliente@reservalocal.com` | `Cliente123!` | — |
+
+
 ### Crear una cuenta nueva
 
 Pulsa el enlace **"¿No tienes cuenta? Regístrate"** debajo del botón Entrar. Aparecen campos adicionales:
