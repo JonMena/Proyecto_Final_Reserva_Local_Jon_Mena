@@ -165,3 +165,41 @@ En **Perfil del negocio** puedes:
 - Tras hacer una reserva, vuelve al selector de negocios para poder reservar en otro sitio o ver tus citas en **Mis reservas**.
 - Si quieres limpiar tu lista, cancela primero las reservas activas y luego elimínalas cuando aparezcan como canceladas.
 - El administrador ve en tiempo real cualquier cambio que haga el cliente (cambio de hora, cancelación).
+
+## PARTE TÉCNICA
+
+### Lenguajes y librerías
+
+| Elemento | Para qué se usa |
+|---|---|
+| JavaScript (ES6+) | Lenguaje de toda la interfaz |
+| React | Librería para construir la interfaz por componentes |
+| SCSS | Estilos con variables y anidamiento (tema oscuro) |
+| axios | Cliente HTTP: envía las peticiones al backend y adjunta el token |
+| Netlify | Plataforma de despliegue del frontend |
+
+No se usan librerías de iconos ni de rutas externas: los iconos son SVG
+propios y la navegación entre vistas se controla con el estado de React.
+
+### Distribución de los archivos
+
+```
+Reserva_Local/
+├── static/            index.html y favicon servidos directamente
+├── src/
+│   ├── api/           Cliente HTTP (axios) y guardado del token
+│   ├── auth.js        Guardar y leer la sesión del navegador
+│   ├── components/    Login, navbar, selector, tarjetas y formularios
+│   ├── pages/         Vistas principales (panel del negocio, mis reservas)
+│   └── style/         main.scss (base y login) y paneles.scss (paneles)
+├── netlify.toml       Configuración del build en Netlify
+├── _redirects         Redirecciones para que el SPA funcione bien
+└── README.md          Documentación
+```
+
+### Cómo se reparte el trabajo entre carpetas
+
+- **components/**: piezas reutilizables y autónomas (una tarjeta, un formulario).
+- **pages/**: juntan varias piezas para formar una pantalla completa.
+- **api/**: único lugar que habla con el backend; el resto de la app no hace peticiones directamente.
+- **style/**: dos archivos SCSS que se importan desde las páginas y dan el tema oscuro a todo.
